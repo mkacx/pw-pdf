@@ -6,22 +6,22 @@ import fs from 'fs';
 let server;
 let firstTestFailed;
 
-test.beforeAll(async () => {
-  // Ustaw absolutną ścieżkę do katalogu z plikiem PDF
-  const documentPath = path.resolve('/Users/kacx/Documents');
+// test.beforeAll(async () => {
+//   // Ustaw absolutną ścieżkę do katalogu z plikiem PDF
+//   const documentPath = path.resolve('/Users/kacx/Documents');
 
-  // Uruchom serwer http-server w katalogu, gdzie znajduje się plik PDF
-  server = httpServer.createServer({ root: documentPath });
-  server.listen(8080);
+//   // Uruchom serwer http-server w katalogu, gdzie znajduje się plik PDF
+//   server = httpServer.createServer({ root: documentPath });
+//   server.listen(8080);
   
-  console.log(`Serwer HTTP uruchomiony na porcie 8080, serwuje pliki z ${documentPath}`);
-});
+//   console.log(`Serwer HTTP uruchomiony na porcie 8080, serwuje pliki z ${documentPath}`);
+// });
 
-test.afterAll(async () => {
-  // Zamknij serwer po zakończeniu testów
-  server.close();
-  console.log('Serwer HTTP zamknięty');
-});
+// test.afterAll(async () => {
+//   // Zamknij serwer po zakończeniu testów
+//   server.close();
+//   console.log('Serwer HTTP zamknięty');
+// });
 
 test('Bigger Docs', async ({ page }) => {
   page.goto('http://localhost:8080/wyniki2.html');
@@ -37,11 +37,11 @@ test('Bigger Docs', async ({ page }) => {
 test('Smaller Docs', async ({ page }) => {
   try {
     // Pierwsza wersja testu: od wyniki1 do wyniki2
-    await page.goto('http://localhost:8080/wyniki2.html');
+    await page.goto('/wyniki2.html');
     await page.waitForTimeout(1000);
     await page.screenshot({ path: 'tests/firstDoc.spec.ts-snapshots/screen-match2-chromium-darwin.png', fullPage: true });
     
-    await page.goto('http://localhost:8080/wyniki1.html');
+    await page.goto('/wyniki1.html');
     await page.waitForTimeout(1000);
     
     expect(await page.screenshot({
@@ -54,10 +54,10 @@ test('Smaller Docs', async ({ page }) => {
   }
   // Druga wersja testu: od wyniki2 do wyniki1 (jeśli pierwszy test przejdzie)
   if (!firstTestFailed) {
-    await page.goto('http://localhost:8080/wyniki1.html');
+    await page.goto('/wyniki1.html');
     await page.waitForTimeout(1000);
     await page.screenshot({ path: 'tests/firstDoc.spec.ts-snapshots/screen-match2-chromium-darwin.png', fullPage: true });
-    await page.goto('http://localhost:8080/wyniki2.html');
+    await page.goto('/wyniki2.html');
     await page.waitForTimeout(1000);
     expect(await page.screenshot({
       fullPage: true

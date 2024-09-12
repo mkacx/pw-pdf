@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-
+import { port } from './setup/server';
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -11,6 +11,9 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  globalSetup: require.resolve('./setup/global-setup.ts'), // Ścieżka do global-setup
+  globalTeardown: require.resolve('./setup/global-teardown.ts'), // Ścieżka do global-teardown
+
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -25,7 +28,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: `http://127.0.0.1:${port}`,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
